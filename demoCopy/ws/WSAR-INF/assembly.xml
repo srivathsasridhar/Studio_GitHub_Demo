@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+     xmlns="http://www.springframework.org/schema/beans"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:cc="http://www.capeclear.com/assembly/10"
+     xmlns:cloud="urn:com.workday/esb/cloud/10.0"
+     xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+     xmlns:pi="urn:com.workday/picof"
+     xmlns:wd="urn:com.workday/bsvc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+	<cc:assembly id="WorkdayAssembly" version="2019.6">
+        <cc:workday-in id="StartHere" routes-to="GetEventDocuments">
+            <cc:integration-system name="demoCopy">
+        <cloud:attribute-map-service name="demoCopy-Config">
+          <cloud:attribute name="Input Document Tags">
+            <cloud:type>
+              <cloud:class-report-field description="Document Tags" type="WID" singular="false">eef1d7fe8ea9408e85a43ce755c69ef2</cloud:class-report-field>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="Output Document Tags">
+            <cloud:type>
+              <cloud:class-report-field description="Document Tags" type="WID" singular="false">eef1d7fe8ea9408e85a43ce755c69ef2</cloud:class-report-field>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:attribute name="Mark Output Deliverable">
+            <cloud:type>
+              <cloud:simple-type>boolean</cloud:simple-type>
+            </cloud:type>
+          </cloud:attribute>
+        </cloud:attribute-map-service>
+      </cc:integration-system>
+        </cc:workday-in>
+        <cc:local-out id="GetEventDocuments" routes-response-to="Route" endpoint="vm://wcc/GetEventDocuments"><cc:set name="ie.event.wid" value="lp.isSet() ? lp.getIntegrationEventWID() : null"/></cc:local-out>
+        <cc:route id="Route">
+            <cc:doc-iterator labels="@{util.listToCommaDelimString( intsys.getAttributeReferenceDataList('Input Document Tags', 'Document_Tag_Name') )}"/>
+            <cc:sub-route name="SubRoute" routes-to="Copy"/>
+        </cc:route>
+        <cc:async-mediation id="Copy" routes-to="ReportAttachment">
+            <cc:steps>
+                <cc:xslt-plus id="Reserialize" input="variable" input-variable="wd.retrieve.variable" url="copy.xsl"/>
+                <cc:store id="Store" output="variable" output-variable="store.blob" createDocumentReference="false" summary="'Reserialized version of ' + vars['wd.retrieve.variable'].fileName" title="@{vars['wd.retrieve.variable'].fileName}"/>
+            </cc:steps>
+            <cc:send-error id="eh" routes-to="PutIntegrationMessage0"/>
+        </cc:async-mediation>
+        <cc:local-out id="ReportAttachment" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'INFO'"/><cc:set name="is.message.summary" value="'Reserialized version of ' + vars['wd.retrieve.variable'].fileName"/><cc:set name="is.document.variable.name" value="'store.blob'"/><cc:set name="is.document.deliverable" value="intsys.getAttributeAsBoolean('Mark Output Deliverable').toString()"/><cc:set name="is.document.labels" value="util.listToCommaDelimString( intsys.getAttributeReferenceDataList('Output Document Tags', 'Document_Tag_Name') )"/></cc:local-out>
+        <cc:local-out id="PutIntegrationMessage0" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'ERROR'"/><cc:set name="is.message.summary" value="'An error occurred re-serializing ' + vars['wd.retrieve.variable'].fileName + '. The reported problem was ' + context.errorMessage"/><cc:set name="is.message.storage.enabled" value="false"/></cc:local-out>
+	</cc:assembly>
+
+</beans>

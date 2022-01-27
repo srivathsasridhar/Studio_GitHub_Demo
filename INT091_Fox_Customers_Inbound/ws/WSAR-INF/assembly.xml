@@ -245,17 +245,7 @@
         </cc:async-mediation>
         <cc:local-out id="CallCompleteIntegration" store-message="none" endpoint="vm://INT091_Fox_Customers_Inbound/CompleteIntegration"/>
         <cc:local-out id="PutIntegrationMessage0" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'CRITICAL'"/><cc:set name="is.message.summary" value="'Failed to create response file. Error message: ' + context.errorMessage"/></cc:local-out>
-        <cc:local-out id="PutIntegrationMessage1" routes-response-to="AsyncMediation9" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'INFO'"/><cc:set name="is.message.summary" value="'Response Document Created.'"/><cc:set name="is.document.file.name" value="'INT091_WIS_Response.json'"/><cc:set name="is.document.labels" value="'WIS_Response'"/><cc:set name="is.document.variable.name" value="'WisResponseJSON'"/></cc:local-out>
-        <cc:async-mediation id="AsyncMediation9">
-            <cc:steps>
-                <cc:write id="Write">
-                    <cc:message>
-                        <cc:message-content/>
-                        <cc:text>test</cc:text>
-                    </cc:message>
-                </cc:write>
-            </cc:steps>
-        </cc:async-mediation>
+        <cc:local-out id="PutIntegrationMessage1" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'INFO'"/><cc:set name="is.message.summary" value="'Response Document Created.'"/><cc:set name="is.document.file.name" value="'INT091_WIS_Response.json'"/><cc:set name="is.document.labels" value="'WIS_Response'"/><cc:set name="is.document.variable.name" value="'WisResponseJSON'"/></cc:local-out>
 	</cc:assembly>
 
 </beans>
