@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wdnm:Diagram xmlns:wdnm="http://workday.com/studio/editors/notation">
+  <element href="assembly.xml#WorkdayAssembly"/>
+  <visualProperties x="86" y="138">
+    <element href="assembly.xml#StartHere"/>
+  </visualProperties>
+  <visualProperties x="222" y="161">
+    <element href="assembly.xml#AsyncMediation"/>
+  </visualProperties>
+  <visualProperties>
+    <element href="assembly.xml#GetPOSTMessage"/>
+  </visualProperties>
+  <visualProperties>
+    <element href="assembly.xml#Route"/>
+  </visualProperties>
+  <visualProperties>
+    <element href="assembly.xml#AsyncMediation0"/>
+  </visualProperties>
+  <visualProperties x="427" y="193">
+    <element href="assembly.xml#CallGetPOSTMessage"/>
+  </visualProperties>
+  <visualProperties x="113" y="581">
+    <element href="assembly.xml#BuildAPI"/>
+  </visualProperties>
+  <visualProperties x="211" y="615">
+    <element href="assembly.xml#AsyncMediation1"/>
+  </visualProperties>
+  <visualProperties x="608" y="481">
+    <element href="assembly.xml#AsyncMediation2"/>
+  </visualProperties>
+  <visualProperties x="656" y="214">
+    <element href="assembly.xml#CallBuildAPI"/>
+  </visualProperties>
+  <visualProperties x="770" y="451">
+    <element href="assembly.xml#AsyncMediation3"/>
+  </visualProperties>
+  <visualProperties x="356" y="598">
+    <element href="assembly.xml#Splitter"/>
+  </visualProperties>
+  <visualProperties x="496" y="607">
+    <element href="assembly.xml#AsyncMediation4"/>
+  </visualProperties>
+  <visualProperties x="642" y="673">
+    <element href="assembly.xml#WorkdayOutSoap"/>
+  </visualProperties>
+  <visualProperties x="503" y="944">
+    <element href="assembly.xml#AsyncMediation5"/>
+  </visualProperties>
+  <visualProperties x="571" y="1001">
+    <element href="assembly.xml#AsyncMediation6"/>
+  </visualProperties>
+  <visualProperties x="974" y="1050">
+    <element href="assembly.xml#AsyncMediation7"/>
+  </visualProperties>
+  <visualProperties x="332" y="1047">
+    <element href="assembly.xml#PutIntegrationMessage"/>
+  </visualProperties>
+  <visualProperties x="125" y="1219">
+    <element href="assembly.xml#CompleteIntegration"/>
+  </visualProperties>
+  <visualProperties x="260" y="1234">
+    <element href="assembly.xml#AsyncMediation8"/>
+  </visualProperties>
+  <visualProperties x="690" y="203">
+    <element href="assembly.xml#CallCompleteIntegration"/>
+  </visualProperties>
+  <visualProperties x="305" y="1385">
+    <element href="assembly.xml#PutIntegrationMessage0"/>
+  </visualProperties>
+  <visualProperties x="565" y="1294">
+    <element href="assembly.xml#PutIntegrationMessage1"/>
+  </visualProperties>
+  <visualProperties x="773" y="1338">
+    <element href="assembly.xml#AsyncMediation9"/>
+  </visualProperties>
+  <connections type="routesTo" sourceAnchorX="0.8582089552238806" sourceAnchorY="1.0" targetAnchorX="0.125" targetAnchorY="0.5108695652173914">
+    <source href="assembly.xml#StartHere"/>
+    <target href="assembly.xml#AsyncMediation"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.5885167464114832" sourceAnchorY="1.0" targetAnchorX="0.04716981132075472" targetAnchorY="0.3974358974358974">
+    <source href="assembly.xml#GetPOSTMessage"/>
+    <target href="assembly.xml#Route"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7815126050420168" sourceAnchorY="1.0" targetAnchorX="0.12359550561797752" targetAnchorY="0.45918367346938777">
+    <source href="assembly.xml#//@beans/@mixed.1/@route.0/@subRoute.0"/>
+    <target href="assembly.xml#AsyncMediation0"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.30434782608695654" targetAnchorX="0.09340659340659341" targetAnchorY="0.32432432432432434">
+    <source href="assembly.xml#AsyncMediation"/>
+    <target href="assembly.xml#CallGetPOSTMessage"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7016129032258065" sourceAnchorY="1.0" targetAnchorX="0.06179775280898876" targetAnchorY="0.5543478260869565">
+    <source href="assembly.xml#BuildAPI"/>
+    <target href="assembly.xml#AsyncMediation1"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.7958333333333333" sourceAnchorY="1.0" targetAnchorX="0.0967741935483871" targetAnchorY="0.4594594594594595">
+    <source href="assembly.xml#CallGetPOSTMessage"/>
+    <target href="assembly.xml#CallBuildAPI"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.9850746268656716" sourceAnchorY="0.5531914893617021" targetAnchorX="0.1791044776119403" targetAnchorY="0.5531914893617021">
+    <source href="assembly.xml#AsyncMediation0"/>
+    <target href="assembly.xml#AsyncMediation3"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.26595744680851063" targetAnchorX="0.17482517482517482" targetAnchorY="0.9574468085106383">
+    <source href="assembly.xml#AsyncMediation2"/>
+    <target href="assembly.xml#AsyncMediation3"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2978723404255319" targetAnchorX="0.205607476635514" targetAnchorY="0.45">
+    <source href="assembly.xml#AsyncMediation1"/>
+    <target href="assembly.xml#Splitter"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.7446808510638298" sourceAnchorY="1.0" targetAnchorX="0.22388059701492538" targetAnchorY="0.42391304347826086">
+    <source href="assembly.xml#//@beans/@mixed.1/@splitter.0/@subRoute.0"/>
+    <target href="assembly.xml#AsyncMediation5"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2391304347826087" targetAnchorX="0.16447368421052633" targetAnchorY="0.4864864864864865">
+    <source href="assembly.xml#AsyncMediation4"/>
+    <target href="assembly.xml#WorkdayOutSoap"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2391304347826087" targetAnchorX="0.06716417910447761" targetAnchorY="0.5106382978723404">
+    <source href="assembly.xml#AsyncMediation5"/>
+    <target href="assembly.xml#AsyncMediation4"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.8976377952755905" sourceAnchorY="1.0" targetAnchorX="0.5223880597014925" targetAnchorY="0.2608695652173913">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.29/@mixed.3"/>
+    <target href="assembly.xml#AsyncMediation6"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.6776315789473685" sourceAnchorY="1.0" targetAnchorX="0.12686567164179105" targetAnchorY="0.532608695652174">
+    <source href="assembly.xml#WorkdayOutSoap"/>
+    <target href="assembly.xml#AsyncMediation7"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.0" targetAnchorX="0.2826086956521739" targetAnchorY="0.16216216216216217">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.15/@mixed.3"/>
+    <target href="assembly.xml#PutIntegrationMessage"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.834319526627219" sourceAnchorY="1.0" targetAnchorX="0.1791044776119403" targetAnchorY="0.4891304347826087">
+    <source href="assembly.xml#CompleteIntegration"/>
+    <target href="assembly.xml#AsyncMediation8"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.792" sourceAnchorY="1.0" targetAnchorX="0.041884816753926704" targetAnchorY="0.3783783783783784">
+    <source href="assembly.xml#CallBuildAPI"/>
+    <target href="assembly.xml#CallCompleteIntegration"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="0.3891891891891892" sourceAnchorY="1.0" targetAnchorX="0.4031413612565445" targetAnchorY="0.40540540540540543">
+    <source href="assembly.xml#//@beans/@mixed.1/@mixed.39/@mixed.3"/>
+    <target href="assembly.xml#PutIntegrationMessage0"/>
+  </connections>
+  <connections type="routesTo" sourceAnchorX="1.0" sourceAnchorY="0.2682926829268293" targetAnchorX="0.08021390374331551" targetAnchorY="0.2972972972972973">
+    <source href="assembly.xml#AsyncMediation8"/>
+    <target href="assembly.xml#PutIntegrationMessage1"/>
+  </connections>
+  <connections type="routesResponseTo" sourceAnchorX="0.8716577540106952" sourceAnchorY="1.0" targetAnchorX="0.09774436090225563">
+    <source href="assembly.xml#PutIntegrationMessage1"/>
+    <target href="assembly.xml#AsyncMediation9"/>
+  </connections>
+  <swimlanes x="61" y="15" name="Swimlane" orientation="VERTICAL" elements="//@swimlanes.1 //@swimlanes.2 //@swimlanes.3 //@swimlanes.10"/>
+  <swimlanes x="65" y="96" name="Swimlane" alignment="MIDDLE">
+    <elements href="assembly.xml#StartHere"/>
+    <elements href="assembly.xml#AsyncMediation"/>
+    <elements href="assembly.xml#CallGetPOSTMessage"/>
+    <elements href="assembly.xml#CallBuildAPI"/>
+    <elements href="assembly.xml#CallCompleteIntegration"/>
+  </swimlanes>
+  <swimlanes x="606" y="245" name="Swimlane" alignment="MIDDLE">
+    <elements href="assembly.xml#GetPOSTMessage"/>
+    <elements href="#//@swimlanes.6"/>
+  </swimlanes>
+  <swimlanes x="120" y="516" name="Swimlane" alignment="MIDDLE">
+    <elements href="assembly.xml#BuildAPI"/>
+    <elements href="#//@swimlanes.9"/>
+    <elements href="assembly.xml#Splitter"/>
+    <elements href="#//@swimlanes.8"/>
+    <elements href="assembly.xml#AsyncMediation4"/>
+    <elements href="assembly.xml#WorkdayOutSoap"/>
+    <elements href="assembly.xml#AsyncMediation7"/>
+  </swimlanes>
+  <swimlanes x="472" y="461" name="Swimlane" alignment="MIDDLE">
+    <elements href="assembly.xml#AsyncMediation0"/>
+    <elements href="assembly.xml#AsyncMediation3"/>
+  </swimlanes>
+  <swimlanes x="257" y="396" name="Swimlane" alignment="MIDDLE">
+    <elements href="assembly.xml#Route"/>
+    <elements href="#//@swimlanes.4"/>
+  </swimlanes>
+  <swimlanes x="208" y="461" name="Swimlane" orientation="VERTICAL" elements="//@swimlanes.5 //@swimlanes.7"/>
+  <swimlanes x="357" y="558" name="Swimlane">
+    <elements href="assembly.xml#AsyncMediation2"/>
+  </swimlanes>
+  <swimlanes x="498" y="902" name="Swimlane" orientation="VERTICAL">
+    <elements href="assembly.xml#AsyncMediation5"/>
+    <elements href="assembly.xml#AsyncMediation6"/>
+  </swimlanes>
+  <swimlanes x="202" y="895" name="Swimlane" orientation="VERTICAL">
+    <elements href="assembly.xml#AsyncMediation1"/>
+    <elements href="assembly.xml#PutIntegrationMessage"/>
+  </swimlanes>
+  <swimlanes x="144" y="1162" name="Swimlane" alignment="MIDDLE">
+    <elements href="assembly.xml#CompleteIntegration"/>
+    <elements href="#//@swimlanes.11"/>
+    <elements href="assembly.xml#PutIntegrationMessage1"/>
+    <elements href="assembly.xml#AsyncMediation9"/>
+  </swimlanes>
+  <swimlanes x="246" y="1331" name="Swimlane" orientation="VERTICAL">
+    <elements href="assembly.xml#AsyncMediation8"/>
+    <elements href="assembly.xml#PutIntegrationMessage0"/>
+  </swimlanes>
+</wdnm:Diagram>

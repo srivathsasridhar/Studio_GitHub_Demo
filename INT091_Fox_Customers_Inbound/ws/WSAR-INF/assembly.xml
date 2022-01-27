@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+     xmlns="http://www.springframework.org/schema/beans"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:cc="http://www.capeclear.com/assembly/10"
+     xmlns:cloud="urn:com.workday/esb/cloud/10.0"
+     xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+     xmlns:pi="urn:com.workday/picof"
+     xmlns:wd="urn:com.workday/bsvc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+	<cc:assembly id="WorkdayAssembly" version="2021.34">
+        <cc:workday-in id="StartHere" routes-to="AsyncMediation">
+            <cc:integration-system name="INT091 Fox Customers Inbound">
+        <cloud:attribute-map-service name="INT091_AMS">
+          <cloud:attribute name="Validate Only">
+            <cloud:type>
+              <cloud:simple-type>boolean</cloud:simple-type>
+            </cloud:type>
+          </cloud:attribute>
+        </cloud:attribute-map-service>
+        <cloud:listener-service name="INT091_Listener_Service"/>
+      </cc:integration-system>
+        </cc:workday-in>
+        <cc:async-mediation id="AsyncMediation" routes-to="CallGetPOSTMessage">
+            <cc:steps>
+                <cc:eval id="Eval">
+                    <cc:expression>props['ValidateOnly'] = intsys.getAttribute('Validate Only')</cc:expression>
+                </cc:eval>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="AsyncMediation0" routes-to="AsyncMediation3">
+            <cc:steps>
+                <cc:copy id="Copy" output-mimetype="text/plain" input="variable" input-variable="wd.retrieve.variable"/>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:route id="Route">
+            <cc:doc-iterator/>
+            <cc:sub-route name="SubRoute" routes-to="AsyncMediation0"/>
+        </cc:route>
+        <cc:local-in id="GetPOSTMessage" routes-to="Route"/>
+        <cc:local-out id="CallGetPOSTMessage" store-message="none" routes-response-to="CallBuildAPI" endpoint="vm://INT091_Fox_Customers_Inbound/GetPOSTMessage"/>
+        <cc:local-in id="BuildAPI" routes-to="AsyncMediation1"/>
+        <cc:async-mediation id="AsyncMediation1" routes-to="Splitter">
+            <cc:steps>
+                <cc:xslt-plus id="XsltPlus" url="INT091_Submit_Customer.xsl"/>
+                <cc:eval id="Eval">
+                    <cc:expression>props['BatchCorrelationID'] = parts[0].xpath('root/data/batch_correlation_id')</cc:expression>
+                </cc:eval>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="PutIntegrationMessage"/>
+        </cc:async-mediation>
+        <cc:async-mediation id="AsyncMediation2" routes-to="AsyncMediation3">
+            <cc:steps>
+                <cc:write id="Write" output-mimetype="text/plain">
+                    <cc:message>
+                        <cc:text>{&#xD;
+	&quot;batch_correlation_id&quot;: &quot;b394e366-eece-4f49-9c86-46005acdba78&quot;,&#xD;
+	&quot;customer_records&quot;: [&#xD;
+		{&#xD;
+			&quot;request_correlation_id&quot;: &quot;9b7daa66-f77a-4a6c-b24c-41ef467eb8a2&quot;,&#xD;
+			&quot;customer_id&quot;: &quot;C-9942456&quot;,&#xD;
+			&quot;customer_reference_id&quot;: &quot;4b7daa68-f77a-4a6c-b24c-41ef467eb8a3&quot;,&#xD;
+			&quot;customer_name&quot;: &quot;UNM Medical Group, Inc.&quot;,&#xD;
+			&quot;alternate_name&quot;: &quot;UNM Medical Group&quot;,&#xD;
+			&quot;customer_category&quot;: &quot;Standard&quot;,&#xD;
+			&quot;customer_group&quot;: [&#xD;
+				&quot;Customers_U&quot;&#xD;
+			],&#xD;
+			&quot;customer_status&quot;: &quot;Active&quot;,&#xD;
+			&quot;alternate_name_usage_reference&quot;: &quot;Remit_to_advice_Name&quot;,&#xD;
+			&quot;address&quot;: {&#xD;
+				&quot;address_1&quot;: &quot;933 Bradbury Dr. SE, Suite 2222&quot;,&#xD;
+				&quot;address_2&quot;: &quot;&quot;,&#xD;
+				&quot;city&quot;: &quot;Albuquerque&quot;,&#xD;
+				&quot;region&quot;: &quot;USA-NM&quot;,&#xD;
+				&quot;country&quot;: &quot;USA&quot;,&#xD;
+				&quot;zip_code&quot;: &quot;87106&quot;,&#xD;
+				&quot;address_usage_type&quot;: &quot;Business&quot;,&#xD;
+				&quot;address_use_for&quot;: &quot;Remit,Billing,Shipping&quot;&#xD;
+			},&#xD;
+			&quot;phone&quot;: {&#xD;
+				&quot;phone_number&quot;: &quot;(505) 272-3303&quot;,&#xD;
+				&quot;phone_device_type&quot;: &quot;Mobile&quot;,&#xD;
+				&quot;phone_usage_type&quot;: &quot;Business&quot;,&#xD;
+				&quot;phone_use_for&quot;: &quot;Remit,Billing,Shipping&quot;&#xD;
+			},&#xD;
+			&quot;email&quot;: {&#xD;
+				&quot;email_id&quot;: &quot;john.doe@gmail.com&quot;,&#xD;
+				&quot;email_usage_type&quot;: &quot;Business&quot;,&#xD;
+				&quot;email_use_for&quot;: &quot;Remit,Billing,Shipping&quot;&#xD;
+			},&#xD;
+			&quot;credit&quot;: {&#xD;
+				&quot;credit_score&quot;: &quot;9.05&quot;,&#xD;
+				&quot;credit_report_date&quot;: &quot;08/02/2021&quot;,&#xD;
+				&quot;credit_rating&quot;: &quot;A&quot;,&#xD;
+				&quot;credit_report_comments&quot;: &quot;08/02/21 *CHG INTERNAL USE ONLY* CREDIT     REPORTGENERATED - INTERNAL CHG CREDIT  SCORE: 9.05, INTERNAL CHG CREDIT RATING: \&quot;A\&quot; RATED. CLIENT IN BUSINESS 13        YEARS. PRIOR HISTORY WITH CHG SINCE 2019. PAYING MARKET ON AVERAGE 0 DAYS PAST DUE. PAYING CHG ON AVERAGE 16 DAYS PAST DUE WITH NET 15 TERMS. ACCEPTABLE TO WORK.UNM MEDICAL GROUP, INC. 82-870-8250&quot;,&#xD;
+				&quot;duns_number&quot;: &quot;82-870-8250&quot;&#xD;
+			},&#xD;
+			&quot;currency&quot;: &quot;USD&quot;,&#xD;
+			&quot;sales_tax_exempt_status&quot;: &quot;USA_taxexempt_customer&quot;,&#xD;
+			&quot;default_payment_terms&quot;: &quot;&quot;,&#xD;
+			&quot;default_payment_type&quot;: &quot;Check&quot;,&#xD;
+			&quot;document_status&quot;: &quot;Approved&quot;,&#xD;
+			&quot;always_separate_payment&quot;: &quot;N&quot;&#xD;
+		},&#xD;
+		{&#xD;
+			&quot;request_correlation_id&quot;: &quot;9b7daa66-f77a-4a6c-b24c-41ef467eb8a2&quot;,&#xD;
+			&quot;customer_id&quot;: &quot;C-8842456&quot;,&#xD;
+			&quot;customer_reference_id&quot;: &quot;5c7daa68-f77a-4a6c-b24c-41ef467eb8a3&quot;,&#xD;
+			&quot;customer_name&quot;: &quot;IMC Medical Group, Inc.&quot;,&#xD;
+			&quot;alternate_name&quot;: &quot;IMC Medical Group&quot;,&#xD;
+			&quot;customer_category&quot;: &quot;Standard&quot;,&#xD;
+			&quot;customer_group&quot;: [&#xD;
+				&quot;Customers_I&quot;&#xD;
+			],&#xD;
+			&quot;customer_status&quot;: &quot;Active&quot;,&#xD;
+			&quot;alternate_name_usage_reference&quot;: &quot;Remit_to_advice_Name&quot;,&#xD;
+			&quot;address&quot;: {&#xD;
+				&quot;address_1&quot;: &quot;7659 Euro Drive&quot;,&#xD;
+				&quot;address_2&quot;: &quot;&quot;,&#xD;
+				&quot;city&quot;: &quot;Midvale&quot;,&#xD;
+				&quot;region&quot;: &quot;USA-UT&quot;,&#xD;
+				&quot;country&quot;: &quot;USA&quot;,&#xD;
+				&quot;zip_code&quot;: &quot;84047&quot;,&#xD;
+				&quot;address_usage_type&quot;: &quot;Business&quot;,&#xD;
+				&quot;address_use_for&quot;: &quot;Remit,Billing,Shipping&quot;&#xD;
+			},&#xD;
+			&quot;phone&quot;: {&#xD;
+				&quot;phone_number&quot;: &quot;(505) 272-3303&quot;,&#xD;
+				&quot;phone_device_type&quot;: &quot;Mobile&quot;,&#xD;
+				&quot;phone_usage_type&quot;: &quot;Business&quot;,&#xD;
+				&quot;phone_use_for&quot;: &quot;Remit,Billing,Shipping&quot;&#xD;
+			},&#xD;
+			&quot;email&quot;: {&#xD;
+				&quot;email_id&quot;: &quot;john.doe@gmail.com&quot;,&#xD;
+				&quot;email_usage_type&quot;: &quot;Business&quot;,&#xD;
+				&quot;email_use_for&quot;: &quot;Remit,Billing,Shipping&quot;&#xD;
+			},&#xD;
+			&quot;credit&quot;: {&#xD;
+				&quot;credit_score&quot;: &quot;9.06&quot;,&#xD;
+				&quot;credit_report_date&quot;: &quot;10/03/2021&quot;,&#xD;
+				&quot;credit_rating&quot;: &quot;A&quot;,&#xD;
+				&quot;credit_report_comments&quot;: &quot;10/03/2021 *CHG INTERNAL USE ONLY* CREDIT     REPORTGENERATED - INTERNAL CHG CREDIT  SCORE: 9.06, INTERNAL CHG CREDIT RATING: \&quot;A\&quot; RATED. CLIENT IN BUSINESS 13        YEARS. PRIOR HISTORY WITH CHG SINCE 2019. PAYING MARKET ON AVERAGE 0 DAYS PAST DUE. PAYING CHG ON AVERAGE 16 DAYS PAST DUE WITH NET 15 TERMS. ACCEPTABLE TO WORK.UNM MEDICAL GROUP, INC. 92-870-8250&quot;,&#xD;
+				&quot;duns_number&quot;: &quot;82-870-8250&quot;&#xD;
+			},&#xD;
+			&quot;currency&quot;: &quot;USD&quot;,&#xD;
+			&quot;sales_tax_exempt_status&quot;: &quot;USA_taxexempt_customer&quot;,&#xD;
+			&quot;default_payment_terms&quot;: &quot;&quot;,&#xD;
+			&quot;default_payment_type&quot;: &quot;Check&quot;,&#xD;
+			&quot;document_status&quot;: &quot;Approved&quot;,&#xD;
+			&quot;always_separate_payment&quot;: &quot;N&quot;&#xD;
+		}&#xD;
+	]&#xD;
+}</cc:text>
+                    </cc:message>
+                </cc:write>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="CallBuildAPI" store-message="none" routes-response-to="CallCompleteIntegration" endpoint="vm://INT091_Fox_Customers_Inbound/BuildAPI"/>
+        <cc:async-mediation id="AsyncMediation3">
+            <cc:steps>
+                <cc:json-to-xml id="JsonToXml"/>
+                <cc:eval id="Eval">
+                    <cc:expression>props['batchid'] = parts[0].xpath('root/data/batch_correlation_id')</cc:expression>
+                </cc:eval>
+                <cc:write id="Write" output="variable" output-mimetype="text/xml" output-variable="WisResponse">
+                    <cc:message>
+                        <cc:text>&lt;root>&#xD;
+	&lt;batch_correlation_id>@{props['batchid']}&lt;/batch_correlation_id></cc:text>
+                    </cc:message>
+                </cc:write>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:splitter id="Splitter">
+            <cc:sub-route name="SubRoute" routes-to="AsyncMediation5"/>
+            <cc:xml-stream-splitter xpath="root/env:Envelope"/>
+        </cc:splitter>
+        <cc:async-mediation id="AsyncMediation4" routes-to="WorkdayOutSoap" execute-steps-when="props['ValidateOnly']">
+            <cc:steps>
+                <cc:set-headers id="SetHeaders"><cc:remove-headers/><cc:add-headers>
+    <cc:add-header name="X-Validate-Only" value="1"/>
+</cc:add-headers></cc:set-headers>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:workday-out-soap id="WorkdayOutSoap" routes-response-to="AsyncMediation7" application="Revenue_Management" version="v36.1"/>
+        <cc:async-mediation id="AsyncMediation5" routes-to="AsyncMediation4" handle-downstream-errors="true">
+            <cc:steps>
+                <cc:eval id="Eval">
+                    <cc:expression>props['Customer_ID'] = parts[0].xpath('env:Envelope/env:Body/wd:Submit_Customer_Request/wd:Customer_Data/wd:Customer_ID')</cc:expression>
+                    <cc:expression>props['Customer_Reference_ID'] = parts[0].xpath('env:Envelope/env:Body/wd:Submit_Customer_Request/wd:Customer_Data/wd:Customer_Reference_ID')</cc:expression>
+                    <cc:expression>props['Request_ID'] = parts[0].xpath('env:Envelope/env:Body/wd:Submit_Customer_Request/wd:Business_Process_Parameters/wd:Comment_Data/wd:Comment')</cc:expression>
+                </cc:eval>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="AsyncMediation6"/>
+        </cc:async-mediation>
+        <cc:async-mediation id="AsyncMediation6">
+            <cc:steps>
+                <cc:cloud-log id="CloudLog" level="error" message="Record failed to process" message-details="@{context.errorMessage}" output-file-type="CSV"/>
+                <cc:write id="Write" output="variable" output-mimetype="text/xml" output-variable="WisResponse">
+                    <cc:message>
+                        <cc:text>@{vars['WisResponse'].text}&#xD;
+&lt;responses>&#xD;
+	&lt;request_id>@{props['Request_ID']}&lt;/request_id>&#xD;
+	&lt;id>@{props['Customer_Reference_ID']}&lt;/id>&#xD;
+	&lt;success>false&lt;/success>&#xD;
+	&lt;response_message>@{context.errorMessage}&lt;/response_message>&#xD;
+&lt;/responses></cc:text>
+                    </cc:message>
+                </cc:write>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:async-mediation id="AsyncMediation7">
+            <cc:steps>
+                <cc:cloud-log id="CloudLog" level="info" message="Record successfully loaded" message-details="@{props['Customer_ID']}" reference-id="props['Customer_ID']"/>
+                <cc:write id="Write" output="variable" output-mimetype="text/xml" output-variable="WisResponse">
+                    <cc:message>
+                        <cc:text>@{vars['WisResponse'].text}&#xD;
+&lt;responses>&#xD;
+	&lt;request_id>@{props['Request_ID']}&lt;/request_id>&#xD;
+	&lt;id>@{props['Customer_Reference_ID']}&lt;/id>&#xD;
+	&lt;success>true&lt;/success>&#xD;
+	&lt;response_message>null&lt;/response_message>&#xD;
+&lt;/responses></cc:text>
+                    </cc:message>
+                </cc:write>
+            </cc:steps>
+        </cc:async-mediation>
+        <cc:local-out id="PutIntegrationMessage" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'CRITICAL'"/><cc:set name="is.message.summary" value="'Failure at XSLT Transformation.'"/></cc:local-out>
+        <cc:local-in id="CompleteIntegration" routes-to="AsyncMediation8"/>
+        <cc:async-mediation id="AsyncMediation8" routes-to="PutIntegrationMessage1">
+            <cc:steps>
+                <cc:store id="Store" input="variable" input-variable="cloud-log-content" title="INT091_Cloudlog.html"/>
+                <cc:write id="Write" output="variable" output-mimetype="text/xml" output-variable="WisResponse">
+                    <cc:message>
+                        <cc:text>@{vars['WisResponse'].text}&#xD;
+&lt;/root></cc:text>
+                    </cc:message>
+                </cc:write>
+                <cc:xml-to-json id="XmlToJson" output="message" output-mimetype="application/json" input="variable" input-variable="WisResponse"/>
+                <cc:store id="Store0" output="variable" output-variable="WisResponseJSON" input="message" createDocumentReference="false" title="INT091_WIS_Response.json"/>
+            </cc:steps>
+            <cc:send-error id="SendError" routes-to="PutIntegrationMessage0"/>
+        </cc:async-mediation>
+        <cc:local-out id="CallCompleteIntegration" store-message="none" endpoint="vm://INT091_Fox_Customers_Inbound/CompleteIntegration"/>
+        <cc:local-out id="PutIntegrationMessage0" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'CRITICAL'"/><cc:set name="is.message.summary" value="'Failed to create response file. Error message: ' + context.errorMessage"/></cc:local-out>
+        <cc:local-out id="PutIntegrationMessage1" routes-response-to="AsyncMediation9" endpoint="vm://wcc/PutIntegrationMessage"><cc:set name="is.message.severity" value="'INFO'"/><cc:set name="is.message.summary" value="'Response Document Created.'"/><cc:set name="is.document.file.name" value="'INT091_WIS_Response.json'"/><cc:set name="is.document.labels" value="'WIS_Response'"/><cc:set name="is.document.variable.name" value="'WisResponseJSON'"/></cc:local-out>
+        <cc:async-mediation id="AsyncMediation9">
+            <cc:steps>
+                <cc:write id="Write">
+                    <cc:message>
+                        <cc:message-content/>
+                        <cc:text>test</cc:text>
+                    </cc:message>
+                </cc:write>
+            </cc:steps>
+        </cc:async-mediation>
+	</cc:assembly>
+
+</beans>
