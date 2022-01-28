@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+     xmlns="http://www.springframework.org/schema/beans"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:cc="http://www.capeclear.com/assembly/10"
+     xmlns:cloud="urn:com.workday/esb/cloud/10.0"
+     xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+     xmlns:pi="urn:com.workday/picof"
+     xmlns:wd="urn:com.workday/bsvc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+	<cc:assembly id="WorkdayAssembly" version="2021.51">
+        <cc:workday-in id="StartHere" routes-to="AsyncMediation">
+            <cc:integration-system name="SS_Studio_Demo">
+        <cloud:attribute-map-service name="SS_Studio_Demo_AMS">
+          <cloud:attribute name="Validation Mode">
+            <cloud:type>
+              <cloud:simple-type>boolean</cloud:simple-type>
+            </cloud:type>
+          </cloud:attribute>
+          <cloud:map name="Gender_Text">
+            <cloud:internal-type>
+              <cloud:simple-type>text</cloud:simple-type>
+            </cloud:internal-type>
+            <cloud:external-type>
+              <cloud:simple-type>text</cloud:simple-type>
+            </cloud:external-type>
+          </cloud:map>
+          <cloud:map name="Gender_Ref">
+            <cloud:internal-type>
+              <cloud:class-report-field description="Worker Gender" type="WID">dc3fd5a2924310000d93b5dd80e60b2b</cloud:class-report-field>
+            </cloud:internal-type>
+            <cloud:external-type>
+              <cloud:simple-type>text</cloud:simple-type>
+            </cloud:external-type>
+          </cloud:map>
+        </cloud:attribute-map-service>
+      </cc:integration-system>
+        </cc:workday-in>
+        <cc:async-mediation id="AsyncMediation">
+            <cc:steps/>
+        </cc:async-mediation>
+	</cc:assembly>
+
+</beans>
